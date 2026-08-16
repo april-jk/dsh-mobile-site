@@ -10,6 +10,7 @@ tags:
   - encryption
   - relay
 metadata:
+  title: DSH Mobile encryption boundaries
   description: Understand DSH Mobile transport encryption, credential boundaries, stored Relay data, and current end-to-end encryption limitations.
 ---
 
@@ -50,6 +51,6 @@ Removing a pairing revokes the Relay device credential, disconnects active acces
 
 ## Practical choices
 
-For low-risk evaluation, use the public Relay with the documented limitation in mind. For more control over the trust boundary, [operate a private Relay](/self-hosted-relay). Self-hosting does not create end-to-end encryption, but it places the Relay process and stored metadata under your control.
+For low-risk evaluation, use the public Relay with the documented limitation in mind. For more control over the trust boundary, [operate a private Relay](/self-hosted-relay/). Self-hosting does not create end-to-end encryption, but it places the Relay process and stored metadata under your control.
 
-See the [complete security model](/security) and report vulnerabilities privately through the Suite security policy.
+See the [complete security model](/security/) and report vulnerabilities privately through the Suite security policy.

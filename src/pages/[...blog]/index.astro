@@ -25,6 +25,63 @@ const { post } = Astro.props as Props;
 
 const url = getCanonical(getPermalink(post.permalink, 'post'));
 const image = (await findImage(post.image)) as ImageMetadata | string | undefined;
+const canonicalUrl = String(url);
+const imageUrl = image
+  ? new URL(typeof image === 'string' ? image : image.src, 'https://dshmobile.online').href
+  : undefined;
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'DSH Mobile Remote',
+        item: 'https://dshmobile.online/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Guides',
+        item: String(getCanonical(getPermalink('', 'blog'))),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: canonicalUrl,
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    url: canonicalUrl,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
+    datePublished: post.publishDate.toISOString(),
+    dateModified: (post.updateDate || post.publishDate).toISOString(),
+    author: {
+      '@type': 'Organization',
+      name: post.author || 'DSH Mobile community',
+      url: 'https://github.com/april-jk/dsh-mobile-suite',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'DSH Mobile community',
+      url: 'https://github.com/april-jk/dsh-mobile-suite',
+    },
+    ...(imageUrl ? { image: [imageUrl] } : {}),
+    ...(post.category ? { articleSection: post.category.title } : {}),
+    ...(post.tags?.length ? { keywords: post.tags.map((tag) => tag.title).join(', ') } : {}),
+  },
+];
 
 const metadata = merge(
   {
@@ -46,6 +103,9 @@ const metadata = merge(
 ---
 
 <Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </Fragment>
   <SinglePost post={{ ...post, image: image }} url={url}>
     {post.Content && <post.Content />}
   </SinglePost>

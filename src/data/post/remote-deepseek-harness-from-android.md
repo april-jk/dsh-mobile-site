@@ -10,6 +10,7 @@ tags:
   - android
   - remote access
 metadata:
+  title: Run DeepSeek Harness on Android
   description: Learn how to open a local DeepSeek Harness Web UI from Android with DSH Mobile Remote and an outbound-only Relay connection.
 ---
 
@@ -73,4 +74,4 @@ The computer shows as offline when DSH stops or the plugin loses its Relay conne
 
 DSH stays bound to `127.0.0.1:3080`. The computer opens only an outbound WSS connection. The mobile app never receives the computer's device token.
 
-The current MVP uses HTTPS/WSS, but it does not add application-level end-to-end encryption. The Relay process can observe forwarded content. Read the [full security model](/security) or [deploy a private Relay](/self-hosted-relay) before using it with sensitive work.
+The current MVP uses HTTPS/WSS, but it does not add application-level end-to-end encryption. The Relay process can observe forwarded content. Read the [full security model](/security/) or [deploy a private Relay](/self-hosted-relay/) before using it with sensitive work.

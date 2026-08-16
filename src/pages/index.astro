@@ -23,6 +23,11 @@ const structuredData = [
     codeRepository: 'https://github.com/april-jk/dsh-mobile-suite',
     license: 'https://opensource.org/license/mit',
     isAccessibleForFree: true,
+    offers: {
+      '@type': 'Offer',
+      price: 0,
+      priceCurrency: 'USD',
+    },
     description: metadata.description,
     author: {
       '@type': 'Organization',
@@ -45,7 +50,7 @@ const structuredData = [
 <PageLayout metadata={metadata}>
   <Fragment slot="head">
     <link rel="alternate" hreflang="en" href="https://dshmobile.online/" />
-    <link rel="alternate" hreflang="zh-CN" href="https://dshmobile.online/zh-cn" />
+    <link rel="alternate" hreflang="zh-CN" href="https://dshmobile.online/zh-cn/" />
     <link rel="alternate" hreflang="x-default" href="https://dshmobile.online/" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </Fragment>

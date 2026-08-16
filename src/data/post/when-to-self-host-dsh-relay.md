@@ -61,4 +61,4 @@ DSH_RELAY=https://relay.example.com npx @deepseek-ai/dsh web
 
 Enter the same origin from the mobile app. Switching Relay logs out the current account because each instance has an independent account and token boundary.
 
-Follow the [complete private Relay guide](/self-hosted-relay) and review the [security model](/security) before inviting other users.
+Follow the [complete private Relay guide](/self-hosted-relay/) and review the [security model](/security/) before inviting other users.

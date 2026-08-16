@@ -1,6 +1,7 @@
 ---
 layout: ~/layouts/MarkdownLayout.astro
 title: Privacy
+description: Learn what the DSH Mobile website and Relay store, what they do not persist, and the current encryption and deletion limitations.
 ---
 
 Last updated: August 17, 2026
@@ -29,7 +30,7 @@ The Relay does not persist forwarded DeepSeek Harness HTTP request bodies, HTTP 
 
 Production connections use HTTPS/WSS. The current MVP does not provide application-level end-to-end encryption. A Relay process can see forwarded DSH content while it is in memory and being routed.
 
-You can [deploy your own Relay](/self-hosted-relay) to control the server, storage, and operational logs. Self-hosting does not add end-to-end encryption.
+You can [deploy your own Relay](/self-hosted-relay/) to control the server, storage, and operational logs. Self-hosting does not add end-to-end encryption.
 
 ## Credentials
 

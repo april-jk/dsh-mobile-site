@@ -3,6 +3,7 @@ import Icon from '~/components/common/Icon.astro';
 
 import PageLayout from '~/layouts/PageLayout.astro';
 import type { MetaData } from '~/types';
+import { getCanonical } from '~/utils/permalinks';
 
 interface Props {
   title: string;
@@ -28,7 +29,7 @@ const breadcrumbs = {
       '@type': 'ListItem',
       position: 2,
       name: title,
-      item: new URL(Astro.url.pathname, 'https://dshmobile.online').href,
+      item: String(getCanonical(Astro.url.pathname)),
     },
   ],
 };

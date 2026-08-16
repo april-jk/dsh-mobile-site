@@ -2,7 +2,7 @@ site:
   name: DSH Mobile Remote
   site: 'https://dshmobile.online'
   base: '/'
-  trailingSlash: false
+  trailingSlash: true
 
   googleSiteVerificationId: null
 

@@ -1,6 +1,7 @@
 ---
 layout: ~/layouts/MarkdownLayout.astro
 title: Terms and project notice
+description: Read the unofficial project notice, open-source licensing terms, security limitations, and user responsibilities for DSH Mobile Remote.
 ---
 
 Last updated: August 17, 2026
@@ -21,7 +22,7 @@ DeepSeek Harness is in Developer Preview and can introduce breaking plugin chang
 
 ## Security limitation
 
-The current MVP uses HTTPS/WSS but does not provide application-level end-to-end encryption. A Relay process can observe content while forwarding it. Review the [security model](/security) before pairing a phone or sending sensitive work.
+The current MVP uses HTTPS/WSS but does not provide application-level end-to-end encryption. A Relay process can observe content while forwarding it. Review the [security model](/security/) before pairing a phone or sending sensitive work.
 
 ## Your responsibilities
 
