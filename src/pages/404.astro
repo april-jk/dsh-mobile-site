@@ -1,24 +1,20 @@
 ---
-import Layout from '~/layouts/Layout.astro';
-import { getHomePermalink } from '~/utils/permalinks';
+import Icon from '~/components/common/Icon.astro';
 
-const title = `Error 404`;
+import Layout from '~/layouts/PageLayout.astro';
 ---
 
-<Layout metadata={{ title }}>
-  <section class="flex items-center h-full p-16">
-    <div class="container flex flex-col items-center justify-center px-5 mx-auto my-8">
-      <div class="max-w-md text-center">
-        <h2 class="mb-8 font-bold text-9xl">
-          <span class="sr-only">Error</span>
-          <span class="text-primary">404</span>
-        </h2>
-        <p class="text-3xl font-semibold md:text-3xl">Sorry, we couldn't find this page.</p>
-        <p class="mt-4 mb-8 text-lg text-muted dark:text-slate-400">
-          But don't worry, you can find plenty of other things on our homepage.
-        </p>
-        <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4">Back to homepage</a>
-      </div>
+<Layout metadata={{ title: 'Page not found', robots: { index: false, follow: true } }}>
+  <section class="mx-auto flex min-h-[70dvh] max-w-3xl flex-col items-start justify-center px-4 py-20 md:px-6">
+    <Icon name="tabler:route-off" class="size-12 text-primary" stroke-width="1.6" />
+    <p class="mt-8 font-mono text-sm text-muted">404</p>
+    <h1 class="mt-3 text-4xl font-bold text-slate-950 dark:text-slate-50 md:text-5xl">This page is not paired</h1>
+    <p class="mt-5 max-w-[54ch] text-lg leading-8 text-muted">
+      The address may have changed. Return to DSH Mobile Remote or open the installation guide.
+    </p>
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a href="/" class="btn-primary">Home</a>
+      <a href="/download" class="btn-secondary">Download</a>
     </div>
   </section>
 </Layout>

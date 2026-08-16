@@ -94,11 +94,11 @@
   display: block;
 }
 
-[astro-icon].icon-light > * {
+.icon-light > * {
   stroke-width: 1.2;
 }
 
-[astro-icon].icon-bold > * {
+.icon-bold > * {
   stroke-width: 2.4;
 }
 

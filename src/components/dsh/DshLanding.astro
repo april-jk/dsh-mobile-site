@@ -1,0 +1,333 @@
+---
+import Icon from '~/components/common/Icon.astro';
+
+import Image from '~/components/common/Image.astro';
+import Button from '~/components/ui/Button.astro';
+
+import appIcon from '~/assets/images/dsh/app-icon.png';
+import devicesImage from '~/assets/images/dsh/mobile-devices.png';
+import harnessImage from '~/assets/images/dsh/mobile-harness.png';
+import harnessRunningImage from '~/assets/images/dsh/mobile-harness-running.png';
+import loginImage from '~/assets/images/dsh/mobile-login.png';
+
+import { faqs, releaseUrl, siteCopy, sourceUrl, type SiteLocale } from '~/data/dsh-site';
+
+interface Props {
+  locale?: SiteLocale;
+}
+
+const { locale = 'en' } = Astro.props;
+const copy = siteCopy[locale];
+const pageFaqs = faqs[locale];
+const isChinese = locale === 'zh-CN';
+---
+
+<section class="relative overflow-hidden border-b border-slate-200/80 dark:border-slate-700/60">
+  <div
+    class="mx-auto grid min-h-[calc(90dvh-4.5rem)] max-w-7xl items-center gap-5 px-4 py-6 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-10 md:px-6 md:py-12"
+  >
+    <div class="relative z-10 max-w-2xl">
+      <div class="mb-4 flex items-center gap-3 text-sm font-semibold text-primary md:mb-6">
+        <Image src={appIcon} alt="" width={42} height={42} loading="eager" class="size-10 rounded-xl" />
+        <span>{copy.hero.label}</span>
+      </div>
+      <h1
+        class="max-w-[15ch] text-4xl font-bold leading-[1.02] text-slate-950 dark:text-slate-50 sm:text-5xl md:text-6xl"
+      >
+        {copy.hero.title}
+      </h1>
+      <p class="mt-4 max-w-[54ch] text-base leading-7 text-muted md:mt-6 md:text-xl md:leading-8">
+        {copy.hero.subtitle}
+      </p>
+      <div class="mt-6 flex flex-col gap-3 sm:flex-row md:mt-8">
+        <Button variant="primary" href="/download" icon="tabler:download" class="w-full sm:w-auto">
+          {copy.hero.primary}
+        </Button>
+        <Button
+          variant="secondary"
+          href={sourceUrl}
+          target="_blank"
+          icon="tabler:brand-github"
+          class="w-full sm:w-auto"
+        >
+          {copy.hero.secondary}
+        </Button>
+      </div>
+      <p class="mt-4 max-w-[62ch] text-xs leading-5 text-muted md:mt-6 md:text-sm md:leading-6">
+        {copy.hero.disclaimer}
+      </p>
+    </div>
+
+    <div
+      class="relative mx-auto h-[220px] w-full max-w-[620px] overflow-hidden sm:h-[300px] md:h-[550px] md:overflow-visible"
+      aria-label={isChinese ? 'DSH Mobile 真实产品界面' : 'Real DSH Mobile product screens'}
+    >
+      <div class="absolute inset-x-[12%] top-[2%] h-[96%] rounded-[28px] bg-slate-200/75 dark:bg-slate-800/75"></div>
+      <img
+        src={harnessRunningImage.src}
+        alt={isChinese ? '手机中正在运行的 DeepSeek Harness 任务' : 'A DeepSeek Harness task running on a phone'}
+        width={430}
+        height={932}
+        loading="eager"
+        fetchpriority="high"
+        class="absolute left-[26%] top-0 z-20 h-[96%] w-auto rounded-[18px] border border-slate-200 object-contain shadow-[0_30px_70px_rgba(31,42,72,0.18)] dark:border-slate-700"
+      />
+      <img
+        src={devicesImage.src}
+        alt={isChinese ? 'DSH Mobile 已配对电脑列表' : 'Paired computers in DSH Mobile'}
+        width={390}
+        height={844}
+        loading="eager"
+        class="absolute bottom-[2%] left-0 z-10 h-[63%] w-auto -rotate-3 rounded-[16px] border border-slate-200 object-contain shadow-[0_22px_55px_rgba(31,42,72,0.16)] dark:border-slate-700"
+      />
+      <img
+        src={loginImage.src}
+        alt={isChinese ? 'DSH Mobile 登录与 Relay 选择界面' : 'DSH Mobile login and Relay selection'}
+        width={390}
+        height={844}
+        loading="eager"
+        class="absolute bottom-[6%] right-0 z-30 hidden h-[54%] w-auto rotate-3 rounded-[16px] border border-slate-200 object-contain shadow-[0_22px_55px_rgba(31,42,72,0.16)] dark:border-slate-700 sm:block"
+      />
+    </div>
+  </div>
+</section>
+
+<section id="workflow" class="scroll-mt-24 border-b border-slate-200/80 dark:border-slate-700/60">
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
+    <h2 class="max-w-[18ch] text-4xl font-bold text-slate-950 dark:text-slate-50 md:text-5xl">{copy.workflow.title}</h2>
+    <p class="mt-5 max-w-[60ch] text-lg leading-8 text-muted">{copy.workflow.body}</p>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-[1.45fr_1fr] md:grid-rows-2">
+      {
+        copy.workflow.items.map((item, index) => (
+          <article
+            class:list={[
+              'rounded-xl border border-slate-200 bg-white p-7 dark:border-slate-700 dark:bg-slate-900',
+              index === 0 ? 'md:row-span-2 md:p-10' : '',
+              index === 1 ? 'bg-[#edf2ff] dark:bg-[#19233f]' : '',
+            ]}
+          >
+            <Icon
+              name={item.icon}
+              class={index === 0 ? 'size-14 text-primary' : 'size-9 text-primary'}
+              stroke-width="1.6"
+            />
+            <h3 class="mt-8 text-2xl font-bold text-slate-950 dark:text-slate-50">{item.title}</h3>
+            <p class="mt-3 max-w-[46ch] leading-7 text-muted">{item.body}</p>
+            {index === 0 && (
+              <Image
+                src={devicesImage}
+                alt={isChinese ? '手机上的电脑在线状态' : 'Computer availability on the phone'}
+                width={390}
+                height={844}
+                class="mx-auto mt-9 max-h-[420px] w-auto rounded-xl border border-slate-200 dark:border-slate-700"
+              />
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="border-b border-slate-200/80 dark:border-slate-700/60">
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
+    <h2 class="text-4xl font-bold text-slate-950 dark:text-slate-50 md:text-5xl">{copy.steps.title}</h2>
+    <p class="mt-5 max-w-[56ch] text-lg leading-8 text-muted">{copy.steps.body}</p>
+
+    <ol class="mt-12 grid gap-8 md:grid-cols-3 md:gap-0">
+      {
+        copy.steps.items.map((item, index) => (
+          <li class="relative pr-8 md:border-t md:border-slate-300 md:pt-8 md:dark:border-slate-600">
+            <span class="mb-5 flex size-9 items-center justify-center rounded-full bg-primary font-bold text-white md:absolute md:-top-[19px]">
+              {index + 1}
+            </span>
+            <h3 class="text-xl font-bold text-slate-950 dark:text-slate-50">{item.title}</h3>
+            <p class="mt-3 leading-7 text-muted">{item.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="border-b border-slate-200/80 dark:border-slate-700/60">
+  <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-6 md:py-28">
+    <div class="relative mx-auto flex w-full max-w-[620px] items-end justify-center gap-4">
+      <Image
+        src={harnessImage}
+        alt={isChinese ? '手机中的 DeepSeek Harness 新任务界面' : 'DeepSeek Harness new task screen on a phone'}
+        width={430}
+        height={932}
+        class="h-auto w-[46%] rounded-xl border border-slate-200 shadow-[0_22px_55px_rgba(31,42,72,0.14)] dark:border-slate-700"
+      />
+      <Image
+        src={harnessRunningImage}
+        alt={isChinese ? '手机中的 DeepSeek Harness 实时任务状态' : 'Live DeepSeek Harness task status on a phone'}
+        width={430}
+        height={932}
+        class="h-auto w-[54%] rounded-xl border border-slate-200 shadow-[0_26px_65px_rgba(31,42,72,0.18)] dark:border-slate-700"
+      />
+    </div>
+    <div>
+      <h2 class="max-w-[14ch] text-4xl font-bold text-slate-950 dark:text-slate-50 md:text-5xl">
+        {copy.harness.title}
+      </h2>
+      <p class="mt-6 max-w-[52ch] text-lg leading-8 text-muted">{copy.harness.body}</p>
+      <a href="/how-it-works" class="mt-8 inline-flex items-center gap-2 font-semibold text-primary hover:underline">
+        {copy.harness.link}<Icon name="tabler:arrow-right" class="size-5" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="security" class="scroll-mt-24 border-b border-slate-200/80 dark:border-slate-700/60">
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
+    <div class="max-w-3xl">
+      <h2 class="max-w-[16ch] text-4xl font-bold text-slate-950 dark:text-slate-50 md:text-5xl">
+        {copy.security.title}
+      </h2>
+      <p class="mt-6 text-lg leading-8 text-muted">{copy.security.body}</p>
+    </div>
+
+    <div class="mt-12 grid items-center gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr]">
+      {
+        copy.security.nodes.map((node, index) => (
+          <>
+            <div class="rounded-xl border border-slate-200 bg-white px-6 py-8 text-center dark:border-slate-700 dark:bg-slate-900">
+              <Icon
+                name={
+                  index === 0 ? 'tabler:device-mobile' : index === 1 ? 'tabler:cloud-lock' : 'tabler:device-desktop'
+                }
+                class="mx-auto size-10 text-primary"
+                stroke-width="1.6"
+              />
+              <div class="mt-4 font-bold text-slate-950 dark:text-slate-50">{node}</div>
+              {index === 2 && <div class="mt-2 font-mono text-sm text-muted">127.0.0.1:3080</div>}
+            </div>
+            {index < copy.security.nodes.length - 1 && (
+              <Icon name="tabler:arrow-right" class="mx-auto hidden size-6 text-muted md:block" />
+            )}
+          </>
+        ))
+      }
+    </div>
+
+    <div
+      class="mt-8 flex flex-col gap-5 rounded-xl border border-amber-300 bg-amber-50 p-6 text-amber-950 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100 md:flex-row md:items-center md:justify-between"
+    >
+      <p class="max-w-[72ch] leading-7">{copy.security.warning}</p>
+      <a href="/security" class="inline-flex shrink-0 items-center gap-2 font-semibold hover:underline">
+        {copy.security.link}<Icon name="tabler:arrow-right" class="size-5" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="border-b border-slate-200/80 dark:border-slate-700/60">
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
+    <h2 class="max-w-[18ch] text-4xl font-bold text-slate-950 dark:text-slate-50 md:text-5xl">{copy.relay.title}</h2>
+    <p class="mt-5 max-w-[58ch] text-lg leading-8 text-muted">{copy.relay.body}</p>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-[0.9fr_1.1fr]">
+      <article class="rounded-xl border border-slate-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-900">
+        <Icon name="tabler:world" class="size-10 text-primary" stroke-width="1.6" />
+        <h3 class="mt-7 text-2xl font-bold text-slate-950 dark:text-slate-50">{copy.relay.hosted.title}</h3>
+        <p class="mt-3 leading-7 text-muted">{copy.relay.hosted.body}</p>
+        <code
+          class="mt-7 block overflow-x-auto rounded-lg bg-slate-100 px-4 py-3 text-sm text-slate-800 dark:bg-slate-800 dark:text-slate-100"
+          >https://relay.dshmobile.online</code
+        >
+      </article>
+      <article class="rounded-xl border border-slate-200 bg-[#edf2ff] p-8 dark:border-slate-700 dark:bg-[#19233f]">
+        <Icon name="tabler:server-2" class="size-10 text-primary" stroke-width="1.6" />
+        <h3 class="mt-7 text-2xl font-bold text-slate-950 dark:text-slate-50">{copy.relay.private.title}</h3>
+        <p class="mt-3 max-w-[56ch] leading-7 text-muted">{copy.relay.private.body}</p>
+        <a
+          href="/self-hosted-relay"
+          class="mt-7 inline-flex items-center gap-2 font-semibold text-primary hover:underline"
+        >
+          {copy.relay.link}<Icon name="tabler:arrow-right" class="size-5" />
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="scroll-mt-24 border-b border-slate-200/80 dark:border-slate-700/60">
+  <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 md:grid-cols-[0.75fr_1.25fr] md:px-6 md:py-28">
+    <div>
+      <h2 class="max-w-[14ch] text-4xl font-bold text-slate-950 dark:text-slate-50 md:text-5xl">{copy.faqTitle}</h2>
+      <p class="mt-5 max-w-[42ch] text-lg leading-8 text-muted">{copy.faqBody}</p>
+    </div>
+    <div class="space-y-3">
+      {
+        pageFaqs.map((faq, index) => (
+          <details
+            class="group rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900"
+            open={index === 0}
+          >
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 font-bold text-slate-950 dark:text-slate-50">
+              {faq.question}
+              <Icon name="tabler:plus" class="size-5 shrink-0 transition-transform group-open:rotate-45" />
+            </summary>
+            <p class="mt-4 max-w-[68ch] leading-7 text-muted">{faq.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-6 md:py-28">
+    <div
+      class="grid items-center gap-8 rounded-xl border border-slate-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-900 md:grid-cols-[1fr_auto] md:p-12"
+    >
+      <div>
+        <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50 md:text-4xl">{copy.cta.title}</h2>
+        <p class="mt-4 max-w-[60ch] text-lg leading-8 text-muted">{copy.cta.body}</p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row md:flex-col">
+        <Button variant="primary" href="/download" icon="tabler:download" class="w-full whitespace-nowrap">
+          {copy.hero.primary}
+        </Button>
+        <Button
+          variant="secondary"
+          href={releaseUrl}
+          target="_blank"
+          icon="tabler:external-link"
+          class="w-full whitespace-nowrap"
+        >
+          {isChinese ? '最新 Release' : 'Latest release'}
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    section:first-of-type img {
+      animation: settle-in 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    section:first-of-type img:nth-of-type(2) {
+      animation-delay: 80ms;
+    }
+
+    section:first-of-type img:nth-of-type(3) {
+      animation-delay: 160ms;
+    }
+  }
+
+  @keyframes settle-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>

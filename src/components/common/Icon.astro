@@ -1,0 +1,52 @@
+---
+import flatColorIcons from '@iconify-json/flat-color-icons/icons.json';
+import tablerIcons from '@iconify-json/tabler/icons.json';
+
+interface Props {
+  name?: string;
+  class?: string;
+  title?: string;
+  [key: string]: unknown;
+}
+
+interface IconData {
+  body: string;
+  width?: number;
+  height?: number;
+}
+
+interface IconCollection {
+  icons: Record<string, IconData>;
+  width?: number;
+  height?: number;
+}
+
+const { name = '', class: className, title, ...attributes } = Astro.props;
+const [prefix, iconName] = name.split(':');
+const collection = (prefix === 'flat-color-icons' ? flatColorIcons : tablerIcons) as IconCollection;
+const icon = name ? collection.icons[iconName] : undefined;
+
+if (name && !icon) {
+  throw new Error(`Unknown icon: ${name}`);
+}
+
+const width = icon?.width || collection.width || 24;
+const height = icon?.height || collection.height || 24;
+---
+
+{
+  icon && (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox={`0 0 ${width} ${height}`}
+      class={className}
+      role={title ? 'img' : undefined}
+      aria-hidden={title ? undefined : 'true'}
+      focusable="false"
+      {...attributes}
+    >
+      {title && <title>{title}</title>}
+      <Fragment set:html={icon.body} />
+    </svg>
+  )
+}

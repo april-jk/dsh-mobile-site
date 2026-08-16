@@ -1,0 +1,34 @@
+---
+import DshLanding from '~/components/dsh/DshLanding.astro';
+import PageLayout from '~/layouts/PageLayout.astro';
+import { faqs } from '~/data/dsh-site';
+
+const metadata = {
+  title: 'DSH Mobile Remote | 在 Android 手机上使用 DeepSeek Harness',
+  ignoreTitleTemplate: true,
+  description:
+    '通过配对的 Android 手机打开电脑本地 DeepSeek Harness Web UI，正常提交 DSH 任务，或连接自己部署的 Relay。',
+  openGraph: { locale: 'zh_CN' },
+};
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: 'zh-CN',
+  mainEntity: faqs['zh-CN'].map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+---
+
+<PageLayout metadata={metadata} language="zh-CN">
+  <Fragment slot="head">
+    <link rel="alternate" hreflang="en" href="https://dshmobile.online/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://dshmobile.online/zh-cn" />
+    <link rel="alternate" hreflang="x-default" href="https://dshmobile.online/" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </Fragment>
+  <DshLanding locale="zh-CN" />
+</PageLayout>

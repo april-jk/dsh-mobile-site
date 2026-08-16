@@ -1,0 +1,111 @@
+---
+import Icon from '~/components/common/Icon.astro';
+
+import DshArticleLayout from '~/layouts/DshArticleLayout.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'DSH Mobile Remote security model',
+  description: 'Documented trust boundaries, stored data, transport protection, and current MVP limitations.',
+  url: 'https://dshmobile.online/security',
+  codeRepository: 'https://github.com/april-jk/dsh-mobile-suite',
+};
+---
+
+<DshArticleLayout
+  title="DSH Mobile Remote security model"
+  description="Understand the outbound connection, device credentials, short-lived WebView tickets, Relay data, and current MVP limitations before pairing a phone."
+  icon="tabler:shield-lock"
+  structuredData={schema}
+>
+  <div
+    class="not-prose rounded-xl border border-amber-300 bg-amber-50 p-6 text-amber-950 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100"
+  >
+    <div class="flex gap-4">
+      <Icon name="tabler:alert-triangle" class="mt-0.5 size-6 shrink-0" />
+      <p class="leading-7">
+        The current MVP uses HTTPS/WSS but does not provide application-level end-to-end encryption. The Relay process
+        can see content while forwarding it.
+      </p>
+    </div>
+  </div>
+
+  <h2>Network boundary</h2>
+  <p>
+    DeepSeek Harness remains bound to <code>127.0.0.1:3080</code>. The Companion does not create a public listener. It
+    opens an outbound authenticated WSS connection to the configured Relay and rewrites the upstream Host header back to
+    the local DSH listener.
+  </p>
+
+  <h2>Credentials</h2>
+  <div class="info-grid not-prose">
+    <section>
+      <Icon name="tabler:device-mobile" class="size-8 text-primary" />
+      <h3 class="mt-5 text-xl font-bold">Mobile client</h3>
+      <p class="mt-3 leading-7 text-muted">
+        Uses account access tokens and short-lived WebView tickets. It never receives the computer device token.
+      </p>
+    </section>
+    <section>
+      <Icon name="tabler:device-laptop" class="size-8 text-primary" />
+      <h3 class="mt-5 text-xl font-bold">Computer</h3>
+      <p class="mt-3 leading-7 text-muted">
+        Stores the Relay device token locally in <code>~/.dsh-remote/config.json</code> with owner-only permissions.
+      </p>
+    </section>
+    <section>
+      <Icon name="tabler:database" class="size-8 text-primary" />
+      <h3 class="mt-5 text-xl font-bold">Relay</h3>
+      <p class="mt-3 leading-7 text-muted">
+        Stores hashes of passwords, refresh tokens, and device tokens rather than the original values.
+      </p>
+    </section>
+    <section>
+      <Icon name="tabler:clock-shield" class="size-8 text-primary" />
+      <h3 class="mt-5 text-xl font-bold">Remote session</h3>
+      <p class="mt-3 leading-7 text-muted">
+        Uses a short-lived ticket tied to the authenticated mobile account and selected device.
+      </p>
+    </section>
+  </div>
+
+  <h2>What the Relay stores</h2>
+  <p>
+    The Relay stores accounts, devices, pairing state, and bounded access-log metadata such as phone information and
+    access times. It does not persist forwarded DSH HTTP or WebSocket request and response bodies.
+  </p>
+  <p>
+    Not persisting payloads is not the same as end-to-end encryption. The Relay process can still observe content while
+    forwarding it in the current release.
+  </p>
+
+  <h2>Revocation</h2>
+  <p>
+    Removing a pairing revokes the Relay device credential, disconnects active remote access, and clears the local
+    credential after the Relay confirms the operation. The <code>dsh-mobile unpair</code> command provides the same operation
+    when the Web UI is unavailable.
+  </p>
+
+  <h2>Known MVP limitations</h2>
+  <ul>
+    <li>No application-level end-to-end encryption.</li>
+    <li>No email verification or account recovery.</li>
+    <li>The Relay must run as a single instance.</li>
+    <li>
+      Account deletion, a full privacy policy, and related compliance work are required before app-store distribution.
+    </li>
+  </ul>
+
+  <h2>Operate a tighter boundary</h2>
+  <p>
+    You can <a href="/self-hosted-relay">deploy your own Relay</a> and control its host, TLS termination, storage, and logs.
+    The same MVP encryption limitation still applies.
+  </p>
+
+  <p>
+    Report security issues privately through the process in the Suite
+    <a href="https://github.com/april-jk/dsh-mobile-suite/blob/main/SECURITY.md">SECURITY.md</a>. Do not publish
+    exploitable details in a public issue.
+  </p>
+</DshArticleLayout>

@@ -1,0 +1,107 @@
+---
+import Image from '~/components/common/Image.astro';
+import DshArticleLayout from '~/layouts/DshArticleLayout.astro';
+import settingsImage from '~/assets/images/dsh/remote-access-settings.png';
+import runningImage from '~/assets/images/dsh/mobile-harness-running.png';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to use DeepSeek Harness from an Android phone',
+  description: 'Install DSH Mobile Remote, pair it from DeepSeek Harness settings, and open the normal DSH Web UI.',
+  totalTime: 'PT10M',
+  supply: [
+    { '@type': 'HowToSupply', name: 'Android phone running Android 8.0 or newer' },
+    { '@type': 'HowToSupply', name: 'Computer running DeepSeek Harness 0.1.0-rc.6' },
+  ],
+  step: [
+    {
+      '@type': 'HowToStep',
+      name: 'Install DSH Mobile and the DSH plugin',
+      text: 'Install the signed Android APK and the pinned GitHub plugin, then start DSH Web.',
+      url: 'https://dshmobile.online/download',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Create a pairing code',
+      text: 'Open Settings > Remote Access in DSH and create a six-digit pairing code or QR code.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Pair the phone',
+      text: 'Sign in on the mobile app, scan the QR code or enter the six-digit code, then select the online computer.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Run a normal Harness task',
+      text: 'Create a task, submit instructions, and follow its progress in the normal DSH Web interface.',
+    },
+  ],
+};
+---
+
+<DshArticleLayout
+  title="How DSH Mobile Remote works"
+  description="Pair an Android phone with a computer running DeepSeek Harness, then open the real DSH Web UI through an outbound-only Relay connection."
+  icon="tabler:route"
+  structuredData={schema}
+>
+  <h2>The connection path</h2>
+  <p>
+    DeepSeek Harness continues to listen on <code>127.0.0.1:3080</code>. The Companion plugin opens an outbound WSS
+    connection to the configured Relay. The phone authenticates with its account, asks for a short-lived WebView ticket,
+    and opens the forwarded DSH interface.
+  </p>
+
+  <div class="info-grid not-prose">
+    <section>
+      <h3 class="text-xl font-bold">What stays local</h3>
+      <p class="mt-3 leading-7 text-muted">
+        The DSH listener and device credential stay on the computer. No inbound public port is created.
+      </p>
+    </section>
+    <section>
+      <h3 class="text-xl font-bold">What crosses the Relay</h3>
+      <p class="mt-3 leading-7 text-muted">
+        Authenticated HTTP and WebSocket traffic needed to render and operate the DSH Web UI.
+      </p>
+    </section>
+  </div>
+
+  <h2>Create and manage the pairing</h2>
+  <p>
+    Open <strong>Settings &gt; Remote Access</strong> in DSH. You can create a QR code or six-digit code, view recent phone
+    access, and remove the pairing from the same screen.
+  </p>
+  <Image
+    src={settingsImage}
+    alt="Remote Access settings inside DeepSeek Harness"
+    width={800}
+    height={747}
+    class="w-full"
+  />
+
+  <h2>Use the real Harness interface</h2>
+  <p>
+    The remote WebView keeps the normal workspace, mode, model, task composer, conversation, injected context, reasoning
+    status, elapsed time, and stop control. It is not a separate task API or a simplified replica.
+  </p>
+  <Image
+    src={runningImage}
+    alt="A DeepSeek Harness task running in the mobile remote WebView"
+    width={430}
+    height={932}
+    class="mx-auto max-h-[760px] w-auto"
+  />
+
+  <h2>When the computer is unavailable</h2>
+  <p>
+    The phone shows the computer as offline when the computer or DSH is stopped, or when the plugin is disconnected from
+    the Relay. The Companion follows the DSH Web process and does not need a separate background process.
+  </p>
+
+  <p>
+    Ready to try it? <a href="/download">Download the Android app</a>. For a controlled network boundary, follow the
+    <a href="/self-hosted-relay">private Relay guide</a>.
+  </p>
+</DshArticleLayout>

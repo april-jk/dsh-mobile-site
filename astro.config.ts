@@ -9,7 +9,6 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
-import icon from 'astro-icon';
 import compress from 'astro-compress';
 import type { AstroIntegration } from 'astro';
 
@@ -33,14 +32,14 @@ export default defineConfig({
     defaultStrategy: 'viewport',
   },
 
-  // Native Fonts API: self-hosts + subsets + preloads Inter and generates
+  // Native Fonts API: self-hosts + subsets + preloads DM Sans and generates
   // metric-adjusted fallbacks. Injected via <Font /> in Layout.astro and
-  // consumed through the `--font-inter` CSS variable in CustomStyles.astro.
+  // consumed through the `--font-dm-sans` CSS variable in CustomStyles.astro.
   fonts: [
     {
       provider: fontProviders.fontsource(),
-      name: 'Inter',
-      cssVariable: '--font-inter',
+      name: 'DM Sans',
+      cssVariable: '--font-dm-sans',
       weights: ['100 900'],
       styles: ['normal'],
       subsets: ['latin'],
@@ -49,25 +48,10 @@ export default defineConfig({
   ],
 
   integrations: [
-    sitemap(),
-    mdx(),
-    icon({
-      include: {
-        tabler: ['*'],
-        'flat-color-icons': [
-          'template',
-          'gallery',
-          'approval',
-          'document',
-          'advertising',
-          'currency-exchange',
-          'voice-presentation',
-          'business-contact',
-          'database',
-        ],
-      },
+    sitemap({
+      filter: (page) => !page.includes('/category/') && !page.includes('/tag/'),
     }),
-
+    mdx(),
     ...whenExternalScripts(() =>
       partytown({
         config: { forward: ['dataLayer.push'] },

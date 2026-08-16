@@ -1,0 +1,88 @@
+---
+import DshArticleLayout from '~/layouts/DshArticleLayout.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'Self-host the DSH Mobile Relay',
+  description: 'Deploy the open-source DSH Relay behind HTTPS and point the phone and computer to the same origin.',
+  url: 'https://dshmobile.online/self-hosted-relay',
+  codeRepository: 'https://github.com/april-jk/dsh-relay',
+  proficiencyLevel: 'Intermediate',
+};
+---
+
+<DshArticleLayout
+  title="Self-host the DSH Mobile Relay"
+  description="Deploy the MIT-licensed Relay behind HTTPS, persist its SQLite data, and point both the Android app and computer to one origin."
+  icon="tabler:server-2"
+  structuredData={schema}
+>
+  <p>
+    A private Relay gives you control over the server, storage, logs, and account boundary. Public mobile builds can
+    switch Relay origins without recompilation.
+  </p>
+
+  <h2>Requirements</h2>
+  <div class="info-grid not-prose">
+    <section>
+      <h3 class="text-xl font-bold">Runtime</h3>
+      <p class="mt-3 leading-7 text-muted">Docker Compose, or Node.js 18 or newer with the release source package.</p>
+    </section>
+    <section>
+      <h3 class="text-xl font-bold">Public edge</h3>
+      <p class="mt-3 leading-7 text-muted">
+        A stable HTTPS origin with WebSocket support and a reverse proxy to port 8787.
+      </p>
+    </section>
+    <section>
+      <h3 class="text-xl font-bold">Persistence</h3>
+      <p class="mt-3 leading-7 text-muted">Durable storage and backups for the SQLite data under <code>/data</code>.</p>
+    </section>
+    <section>
+      <h3 class="text-xl font-bold">Deployment shape</h3>
+      <p class="mt-3 leading-7 text-muted">
+        One Relay instance for the MVP. Multi-instance coordination is not implemented.
+      </p>
+    </section>
+  </div>
+
+  <h2>Start the release package</h2>
+  <p>
+    Download <code>dsh-relay-v*.tar.gz</code> from the latest Suite release, extract it, and configure a long random JWT secret.
+  </p>
+
+  <pre><code>cp .env.example .env
+# Edit .env and replace JWT_SECRET with a long random value.
+docker compose up -d --build
+curl http://127.0.0.1:8787/health</code></pre>
+
+  <h2>Put HTTPS in front</h2>
+  <p>
+    Route an HTTPS hostname to port <code>8787</code> and allow WebSocket upgrades. Do not publish the raw development HTTP
+    port as the production endpoint. Back up the persistent data directory.
+  </p>
+
+  <h2>Point both ends to the same Relay</h2>
+  <p>Start DSH with the private origin:</p>
+
+  <pre><code>DSH_RELAY=https://relay.example.com npx @deepseek-ai/dsh web</code></pre>
+
+  <p>
+    On the mobile login screen, tap <strong>Relay</strong>. After login, the same control is under
+    <strong>Settings &gt; Relay Server</strong>. Enter the exact HTTPS origin used by the computer.
+  </p>
+
+  <p>
+    Changing Relay logs out the current account because accounts and tokens are isolated between Relay instances. Read
+    the full <a href="https://github.com/april-jk/dsh-relay#readme">Relay README</a> for environment variables, storage details,
+    and resource limits.
+  </p>
+
+  <h2>Security boundary</h2>
+  <p>
+    Self-hosting changes who operates the Relay, but it does not add application-level end-to-end encryption. Review the <a
+      href="/security">current security model</a
+    > before exposing the service to users.
+  </p>
+</DshArticleLayout>
