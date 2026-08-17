@@ -29,6 +29,28 @@ Pushes to `main` run checks, build the static site, and deploy `dist/` to GitHub
 
 DNS is managed in Cloudflare. The website records must not replace or proxy the independent `relay.dshmobile.online` service record.
 
+### HTTPS recovery
+
+Keep the apex and `www` website records DNS-only while GitHub provisions its certificate. GitHub documents that HTTPS can take up to an hour after a custom-domain or DNS change. If DNS already resolves to GitHub Pages but the certificate job was never created, remove and re-add the Pages custom domain to retrigger issuance:
+
+```bash
+gh api --method PUT repos/april-jk/dsh-mobile-site/pages -F cname=null
+gh api --method PUT repos/april-jk/dsh-mobile-site/pages \
+  -f cname=dshmobile.online \
+  -f build_type=workflow
+```
+
+Removing the custom domain briefly serves the site only from its default `github.io` URL. After GitHub finishes issuing the certificate, enforce HTTPS and verify both hostnames:
+
+```bash
+gh api --method PUT repos/april-jk/dsh-mobile-site/pages \
+  -F https_enforced=true \
+  -f cname=dshmobile.online \
+  -f build_type=workflow
+curl -I https://dshmobile.online/
+curl -I https://www.dshmobile.online/
+```
+
 ## Content boundaries
 
 - Product claims must match the Suite and component repositories.
