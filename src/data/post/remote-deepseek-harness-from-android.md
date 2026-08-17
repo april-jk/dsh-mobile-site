@@ -47,7 +47,7 @@ Android may ask you to allow the browser or file manager to install unknown apps
 Run the pinned GitHub installation command on the computer:
 
 ```bash
-npx @deepseek-ai/dsh plugin --profile web add "github:april-jk/dsh-mobile-plugin#v0.1.3"
+npx @deepseek-ai/dsh plugin --profile web add "github:april-jk/dsh-mobile-plugin#v0.1.4"
 npx @deepseek-ai/dsh web
 ```
 
@@ -59,7 +59,7 @@ The plugin follows the DSH Web process. You do not need to start a separate Comp
 2. Open **Settings > Remote Access** in the computer's DSH Web UI.
 3. Create an encrypted pairing QR code.
 4. Tap **+** in the mobile computer list.
-5. Scan the QR code. Version 0.1.3 does not allow six-digit-only pairing because it cannot establish the E2EE key.
+5. Scan the QR code. Version 0.1.4 does not allow six-digit-only pairing because it cannot establish the E2EE key.
 6. Select the online computer.
 
 The phone opens the real DSH interface after it receives a short-lived WebView ticket.
@@ -74,4 +74,4 @@ The computer shows as offline when DSH stops or the plugin loses its Relay conne
 
 DSH stays bound to `127.0.0.1:3080`. The computer opens only an outbound WSS connection. The mobile app never receives the computer's device token.
 
-Version 0.1.3 encrypts DSH HTTP, SSE, and WebSocket content end to end between Mobile and Companion. The Relay routes opaque frames but can still observe account/device associations, connection timing, and ciphertext sizes. The PSK profile does not provide forward secrecy. Read the [full security model](/security/) or [deploy a private Relay](/self-hosted-relay/) before using it with sensitive work.
+Version 0.1.4 encrypts DSH HTTP, SSE, and WebSocket content end to end between Mobile and Companion. The Relay routes opaque frames but can still observe account/device associations, connection timing, and ciphertext sizes. The PSK profile does not provide forward secrecy. Read the [full security model](/security/) or [deploy a private Relay](/self-hosted-relay/) before using it with sensitive work.

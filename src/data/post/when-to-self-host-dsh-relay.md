@@ -15,7 +15,7 @@ metadata:
 
 DSH Mobile needs a Relay that both the phone and computer can reach. The default public build points to `https://relay.dshmobile.online`, but the app can switch to a compatible private Relay without recompilation.
 
-Self-hosting changes who operates the forwarding service. Version 0.1.3 uses the same end-to-end encrypted sealed tunnel with either the hosted or a private Relay.
+Self-hosting changes who operates the forwarding service. Version 0.1.4 uses the same end-to-end encrypted sealed tunnel with either the hosted or a private Relay.
 
 ## Use the hosted Relay when
 
@@ -39,7 +39,7 @@ The MVP Relay uses SQLite and must run as one instance. Plan durable storage and
 
 The Relay stores account and device records and observes online state, connection timing, and ciphertext sizes. Self-hosting places that data and operational logging under your control.
 
-It does not change the 0.1.3 content-encryption protocol: DSH HTTP, SSE, and WebSocket envelopes remain encrypted between Mobile and Companion, and the QR-delivered PSK still does not provide forward secrecy.
+It does not change the 0.1.4 content-encryption protocol: DSH HTTP, SSE, and WebSocket envelopes remain encrypted between Mobile and Companion, and the QR-delivered PSK still does not provide forward secrecy.
 
 ## Deployment outline
 

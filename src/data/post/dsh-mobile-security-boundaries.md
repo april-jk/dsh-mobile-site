@@ -14,7 +14,7 @@ metadata:
   description: Understand DSH Mobile end-to-end content encryption, credential boundaries, stored Relay metadata, and current limitations.
 ---
 
-Remote access software should describe its trust boundaries directly. DSH Mobile Remote 0.1.3 combines TLS, scoped credentials, and application-layer encryption between Mobile and Companion.
+Remote access software should describe its trust boundaries directly. DSH Mobile Remote 0.1.4 combines TLS, scoped credentials, and application-layer encryption between Mobile and Companion.
 
 ## Traffic is protected in transit
 
@@ -45,7 +45,7 @@ The Relay does not persist forwarded DSH HTTP request bodies, HTTP response bodi
 
 The Relay can still observe account/device associations, online status, connection time, traffic timing, and ciphertext sizes. This metadata is outside the content-encryption boundary.
 
-## What version 0.1.3 does not protect
+## What version 0.1.4 does not protect
 
 The QR-delivered PSK profile does not provide forward secrecy. If the device master key is later compromised and an attacker previously recorded ciphertext, historical confidentiality may be affected. Compromised phone or computer endpoints are also outside the threat model.
 

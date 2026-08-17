@@ -28,7 +28,7 @@ The Relay does not persist forwarded DeepSeek Harness HTTP request bodies, HTTP 
 
 ## Encryption boundary
 
-Production connections use HTTPS/WSS. Version 0.1.3 additionally encrypts DSH HTTP, SSE, and WebSocket content end to end between Mobile and Companion. The Relay routes opaque frames and does not receive the QR-delivered content key.
+Production connections use HTTPS/WSS. Version 0.1.4 additionally encrypts DSH HTTP, SSE, and WebSocket content end to end between Mobile and Companion. The Relay routes opaque frames and does not receive the QR-delivered content key.
 
 The Relay can still observe account/device associations, online state, connection time, ciphertext length, and traffic timing. The QR-delivered PSK profile does not provide forward secrecy. You can [deploy your own Relay](/self-hosted-relay/) to control the server, metadata storage, and operational logs.
 

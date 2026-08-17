@@ -22,7 +22,7 @@ DeepSeek Harness is in Developer Preview and can introduce breaking plugin chang
 
 ## Security boundary
 
-Version 0.1.3 uses HTTPS/WSS and application-layer end-to-end encryption for DSH session content between Mobile and Companion. The Relay can still observe account/device associations and traffic metadata, and the QR-delivered PSK profile does not provide forward secrecy. Review the [security model](/security/) before pairing a phone or sending sensitive work.
+Version 0.1.4 uses HTTPS/WSS and application-layer end-to-end encryption for DSH session content between Mobile and Companion. The Relay can still observe account/device associations and traffic metadata, and the QR-delivered PSK profile does not provide forward secrecy. Review the [security model](/security/) before pairing a phone or sending sensitive work.
 
 ## Your responsibilities
 
