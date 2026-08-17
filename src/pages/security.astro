@@ -7,7 +7,7 @@ const schema = {
   '@context': 'https://schema.org',
   '@type': 'TechArticle',
   headline: 'DSH Mobile Remote security model',
-  description: 'Documented trust boundaries, stored data, transport protection, and current MVP limitations.',
+  description: 'Documented trust boundaries, end-to-end content encryption, stored data, and current limitations.',
   url: 'https://dshmobile.online/security/',
   codeRepository: 'https://github.com/april-jk/dsh-mobile-suite',
 };
@@ -15,7 +15,7 @@ const schema = {
 
 <DshArticleLayout
   title="DSH Mobile Remote security model"
-  description="Understand the outbound connection, device credentials, short-lived WebView tickets, Relay data, and current MVP limitations before pairing a phone."
+  description="Understand the outbound connection, QR-delivered key, sealed tunnel, Relay metadata, and current limitations before pairing a phone."
   icon="tabler:shield-lock"
   structuredData={schema}
 >
@@ -25,8 +25,8 @@ const schema = {
     <div class="flex gap-4">
       <Icon name="tabler:alert-triangle" class="mt-0.5 size-6 shrink-0" />
       <p class="leading-7">
-        The current MVP uses HTTPS/WSS but does not provide application-level end-to-end encryption. The Relay process
-        can see content while forwarding it.
+        Version 0.1.3 encrypts DSH HTTP, SSE, and WebSocket content end to end between Mobile and Companion. The Relay
+        routes opaque frames and never receives the content key.
       </p>
     </div>
   </div>
@@ -44,14 +44,15 @@ const schema = {
       <Icon name="tabler:device-mobile" class="size-8 text-primary" />
       <h3 class="mt-5 text-xl font-bold">Mobile client</h3>
       <p class="mt-3 leading-7 text-muted">
-        Uses account access tokens and short-lived WebView tickets. It never receives the computer device token.
+        Uses account access tokens, short-lived WebView tickets, and a QR-delivered E2EE key stored in platform secure
+        storage. It never receives the computer device token.
       </p>
     </section>
     <section>
       <Icon name="tabler:device-laptop" class="size-8 text-primary" />
       <h3 class="mt-5 text-xl font-bold">Computer</h3>
       <p class="mt-3 leading-7 text-muted">
-        Stores the Relay device token locally in <code>~/.dsh-remote/config.json</code> with owner-only permissions.
+        Stores the Relay device token and E2EE key locally in <code>~/.dsh-remote/config.json</code> with owner-only permissions.
       </p>
     </section>
     <section>
@@ -65,19 +66,21 @@ const schema = {
       <Icon name="tabler:clock-shield" class="size-8 text-primary" />
       <h3 class="mt-5 text-xl font-bold">Remote session</h3>
       <p class="mt-3 leading-7 text-muted">
-        Uses a short-lived ticket tied to the authenticated mobile account and selected device.
+        Uses a single-use ticket, authenticated PSK handshake, directional AES-256-GCM keys, and replay-protected
+        sequence numbers.
       </p>
     </section>
   </div>
 
   <h2>What the Relay stores</h2>
   <p>
-    The Relay stores accounts, devices, pairing state, and bounded access-log metadata such as phone information and
-    access times. It does not persist forwarded DSH HTTP or WebSocket request and response bodies.
+    The Relay stores accounts, devices, pairing state, event kinds, and bounded access-log metadata such as phone
+    information and access times. It cannot decrypt DSH HTTP, SSE, or WebSocket content and does not persist ciphertext
+    payloads.
   </p>
   <p>
-    Not persisting payloads is not the same as end-to-end encryption. The Relay process can still observe content while
-    forwarding it in the current release.
+    The Relay can still observe account/device associations, online state, connection time, ciphertext length, and
+    traffic timing. End-to-end content encryption does not make the service anonymous.
   </p>
 
   <h2>Revocation</h2>
@@ -89,7 +92,8 @@ const schema = {
 
   <h2>Known MVP limitations</h2>
   <ul>
-    <li>No application-level end-to-end encryption.</li>
+    <li>The QR-delivered PSK profile does not provide forward secrecy.</li>
+    <li>Existing pre-0.1.3 pairings must be removed and paired again by QR.</li>
     <li>No email verification or account recovery.</li>
     <li>The Relay must run as a single instance.</li>
     <li>
@@ -100,7 +104,8 @@ const schema = {
   <h2>Operate a tighter boundary</h2>
   <p>
     You can <a href="/self-hosted-relay/">deploy your own Relay</a> and control its host, TLS termination, storage, and logs.
-    The same MVP encryption limitation still applies.
+    End-to-end content encryption remains active, while self-hosting additionally places metadata and account storage under
+    your control.
   </p>
 
   <p>

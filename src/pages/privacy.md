@@ -22,19 +22,19 @@ When you use a DSH Mobile Relay, that Relay stores data needed to operate accoun
 - Refresh-token hashes and related token state.
 - Paired device records and device-token hashes.
 - Pairing state and short-lived WebView ticket state.
-- Bounded access metadata, including phone information and access times.
+- Bounded access metadata, including phone information and access times, plus event-kind metadata without event payloads.
 
 The Relay does not persist forwarded DeepSeek Harness HTTP request bodies, HTTP response bodies, or WebSocket payload bodies.
 
-## Important encryption limitation
+## Encryption boundary
 
-Production connections use HTTPS/WSS. The current MVP does not provide application-level end-to-end encryption. A Relay process can see forwarded DSH content while it is in memory and being routed.
+Production connections use HTTPS/WSS. Version 0.1.3 additionally encrypts DSH HTTP, SSE, and WebSocket content end to end between Mobile and Companion. The Relay routes opaque frames and does not receive the QR-delivered content key.
 
-You can [deploy your own Relay](/self-hosted-relay/) to control the server, storage, and operational logs. Self-hosting does not add end-to-end encryption.
+The Relay can still observe account/device associations, online state, connection time, ciphertext length, and traffic timing. The QR-delivered PSK profile does not provide forward secrecy. You can [deploy your own Relay](/self-hosted-relay/) to control the server, metadata storage, and operational logs.
 
 ## Credentials
 
-The mobile client uses account access tokens and short-lived WebView tickets. It never receives the computer's Relay device token. The computer stores its device credential locally with owner-only file permissions.
+The mobile client uses account access tokens, short-lived WebView tickets, and a per-device E2EE key in platform secure storage. It never receives the computer's Relay device token. The computer stores its device credential and matching E2EE key locally with owner-only file permissions.
 
 ## Retention and deletion
 

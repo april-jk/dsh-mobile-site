@@ -20,9 +20,9 @@ The DSH Mobile Suite, mobile client, DSH plugin, Relay, and this website are dis
 
 DeepSeek Harness is in Developer Preview and can introduce breaking plugin changes. The current plugin pins a tested Harness version, but future DSH releases may require an updated plugin.
 
-## Security limitation
+## Security boundary
 
-The current MVP uses HTTPS/WSS but does not provide application-level end-to-end encryption. A Relay process can observe content while forwarding it. Review the [security model](/security/) before pairing a phone or sending sensitive work.
+Version 0.1.3 uses HTTPS/WSS and application-layer end-to-end encryption for DSH session content between Mobile and Companion. The Relay can still observe account/device associations and traffic metadata, and the QR-delivered PSK profile does not provide forward secrecy. Review the [security model](/security/) before pairing a phone or sending sensitive work.
 
 ## Your responsibilities
 

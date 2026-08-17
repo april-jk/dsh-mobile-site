@@ -21,7 +21,7 @@ export const siteCopy = {
       items: [
         {
           title: 'Phone',
-          body: 'Sign in, pair by QR or six-digit code, then choose an online computer.',
+          body: 'Sign in, scan the encrypted pairing QR code, then choose an online computer.',
           icon: 'tabler:device-mobile',
         },
         {
@@ -31,7 +31,7 @@ export const siteCopy = {
         },
         {
           title: 'Relay',
-          body: 'HTTPS/WSS carries authenticated traffic. Use the hosted Relay or deploy your own.',
+          body: 'Routes authenticated opaque frames without receiving the DSH content key.',
           icon: 'tabler:arrows-exchange',
         },
       ],
@@ -46,7 +46,7 @@ export const siteCopy = {
         },
         {
           title: 'Pair the phone',
-          body: 'Open Settings > Remote Access, then scan the QR code or enter the six-digit code.',
+          body: 'Open Settings > Remote Access, then scan the encrypted QR code.',
         },
         {
           title: 'Use the normal Harness UI',
@@ -62,7 +62,7 @@ export const siteCopy = {
     security: {
       title: 'Outbound-only from the computer',
       body: 'The Companion opens an outbound WSS connection. It does not create a public listener or send the device token to the phone.',
-      warning: 'The MVP uses TLS but does not yet add application-level end-to-end encryption.',
+      warning: 'Version 0.1.3 encrypts DSH session content end to end; traffic metadata remains visible to the Relay.',
       nodes: ['Android phone', 'HTTPS/WSS Relay', 'Local DSH'],
       link: 'Read the security model',
     },
@@ -102,7 +102,7 @@ export const siteCopy = {
       items: [
         {
           title: '手机',
-          body: '登录后扫描二维码或输入六位配对码，再选择在线电脑。',
+          body: '登录后扫描加密配对二维码，再选择在线电脑。',
           icon: 'tabler:device-mobile',
         },
         {
@@ -112,7 +112,7 @@ export const siteCopy = {
         },
         {
           title: 'Relay',
-          body: 'HTTPS/WSS 中转已认证流量，可使用公共 Relay 或自行部署。',
+          body: '中转已认证的不透明密文帧，不持有 DSH 内容密钥。',
           icon: 'tabler:arrows-exchange',
         },
       ],
@@ -127,7 +127,7 @@ export const siteCopy = {
         },
         {
           title: '配对手机',
-          body: '打开 Settings > Remote Access，扫码或输入六位配对码。',
+          body: '打开 Settings > Remote Access，然后扫描加密二维码。',
         },
         {
           title: '使用原有 Harness UI',
@@ -143,7 +143,7 @@ export const siteCopy = {
     security: {
       title: '电脑端只建立出站连接',
       body: 'Companion 只建立出站 WSS 连接，不创建公网监听，也不会把设备 Token 发给手机。',
-      warning: '当前 MVP 使用 TLS，但尚未提供应用层端到端加密。',
+      warning: '0.1.3 已端到端加密 DSH 会话内容；Relay 仍可见流量元数据。',
       nodes: ['Android 手机', 'HTTPS/WSS Relay', '本地 DSH'],
       link: '阅读安全模型',
     },
@@ -189,7 +189,7 @@ export const faqs = {
     {
       question: 'Is Relay traffic end-to-end encrypted?',
       answer:
-        'Not at the application layer in the current MVP. HTTPS/WSS protects traffic in transit, but the Relay process can see forwarded content.',
+        'Yes for DSH session content in version 0.1.3. Mobile and Companion encrypt HTTP, SSE, and WebSocket envelopes; the Relay still sees account/device associations, timing, and ciphertext sizes.',
     },
     {
       question: 'Which mobile platforms are available?',
@@ -222,7 +222,8 @@ export const faqs = {
     },
     {
       question: 'Relay 流量是端到端加密的吗？',
-      answer: '当前 MVP 没有应用层端到端加密。HTTPS/WSS 保护传输过程，但 Relay 进程能够看到中转内容。',
+      answer:
+        '0.1.3 已对 DSH 会话内容端到端加密。Mobile 与 Companion 加密 HTTP、SSE 和 WebSocket 信封；Relay 仍可见账号/设备关系、时序与密文大小。',
     },
     {
       question: '目前支持哪些移动平台？',

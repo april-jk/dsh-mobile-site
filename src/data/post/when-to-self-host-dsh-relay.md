@@ -15,14 +15,14 @@ metadata:
 
 DSH Mobile needs a Relay that both the phone and computer can reach. The default public build points to `https://relay.dshmobile.online`, but the app can switch to a compatible private Relay without recompilation.
 
-Self-hosting changes who operates the forwarding service. It does not change the basic protocol or add end-to-end encryption.
+Self-hosting changes who operates the forwarding service. Version 0.1.3 uses the same end-to-end encrypted sealed tunnel with either the hosted or a private Relay.
 
 ## Use the hosted Relay when
 
 - You want to try the open-source project quickly.
-- You accept the documented MVP trust boundary.
+- You accept that the Relay can observe account/device associations and traffic metadata, but not DSH content.
 - You do not need a private account database or private operational logs.
-- You can avoid sending sensitive work through the current MVP.
+- You have reviewed the PSK profile's lack of forward secrecy.
 
 The public Relay keeps accounts, devices, pairing state, and bounded access metadata. It does not persist forwarded DSH HTTP or WebSocket bodies.
 
@@ -35,11 +35,11 @@ The public Relay keeps accounts, devices, pairing state, and bounded access meta
 
 The MVP Relay uses SQLite and must run as one instance. Plan durable storage and backups for `/data`.
 
-## What self-hosting does not change
+## What self-hosting changes
 
-The current protocol uses HTTPS/WSS for transport protection. It does not yet provide application-level end-to-end encryption, so the Relay process can observe traffic while forwarding it.
+The Relay stores account and device records and observes online state, connection timing, and ciphertext sizes. Self-hosting places that data and operational logging under your control.
 
-Self-hosting moves that trust to infrastructure you control. It does not remove the trust requirement.
+It does not change the 0.1.3 content-encryption protocol: DSH HTTP, SSE, and WebSocket envelopes remain encrypted between Mobile and Companion, and the QR-delivered PSK still does not provide forward secrecy.
 
 ## Deployment outline
 

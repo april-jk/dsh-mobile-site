@@ -2,7 +2,7 @@
 publishDate: 2026-08-17T00:00:00Z
 author: DSH Mobile community
 title: What DSH Mobile encrypts and what it does not
-excerpt: A direct explanation of TLS, device tokens, WebView tickets, Relay storage, and the missing end-to-end encryption layer.
+excerpt: A direct explanation of TLS, QR-delivered keys, sealed tunnels, Relay metadata, and the remaining encryption limits.
 image: '~/assets/images/dsh/mobile-devices.png'
 category: Security
 tags:
@@ -11,10 +11,10 @@ tags:
   - relay
 metadata:
   title: DSH Mobile encryption boundaries
-  description: Understand DSH Mobile transport encryption, credential boundaries, stored Relay data, and current end-to-end encryption limitations.
+  description: Understand DSH Mobile end-to-end content encryption, credential boundaries, stored Relay metadata, and current limitations.
 ---
 
-Remote access software should describe its trust boundaries directly. DSH Mobile Remote is an MVP with transport encryption and scoped credentials, but without application-level end-to-end encryption.
+Remote access software should describe its trust boundaries directly. DSH Mobile Remote 0.1.3 combines TLS, scoped credentials, and application-layer encryption between Mobile and Companion.
 
 ## Traffic is protected in transit
 
@@ -22,11 +22,11 @@ Production traffic uses HTTPS and WSS. This protects the phone-to-Relay and comp
 
 The computer does not open an inbound public port. DeepSeek Harness remains on `127.0.0.1:3080`, while the plugin opens an outbound authenticated WSS connection.
 
-## The Relay can see forwarded content
+## DSH content is sealed across the Relay
 
-TLS terminates at the Relay. The current MVP does not encrypt DSH payloads again at the application layer, so the Relay process can observe HTTP and WebSocket content while forwarding it.
+QR v2 carries a random 32-byte key directly from Companion to Mobile. Each remote session authenticates that key, derives separate directional keys with HKDF-SHA256, and encrypts HTTP, SSE, and WebSocket envelopes with AES-256-GCM.
 
-This is the most important current limitation. Do not describe the MVP as end-to-end encrypted.
+The Mobile WebView connects to an app-local loopback proxy. The Relay sees only authenticated opaque frames, not DSH paths, headers, status codes, bodies, or WebSocket messages.
 
 ## Device credentials stay off the phone
 
@@ -34,16 +34,20 @@ The mobile client uses account access tokens and short-lived WebView tickets. It
 
 The computer stores its device token in `~/.dsh-remote/config.json` with owner-only permissions. The Relay stores hashes of passwords, refresh tokens, and device tokens.
 
-## The Relay does not persist task bodies
+## The Relay retains metadata, not task content
 
 The Relay does not persist forwarded DSH HTTP request bodies, HTTP response bodies, or WebSocket payload bodies. It stores the data needed to operate the service:
 
 - Accounts and refresh-token state.
 - Paired devices and device-token hashes.
-- Pairing claims and short-lived tickets.
+- Pairing claims, short-lived tickets, and event-kind metadata.
 - Bounded phone and access-time metadata.
 
-Not persisting task bodies reduces retained data, but it does not prevent the Relay process from seeing content in transit.
+The Relay can still observe account/device associations, online status, connection time, traffic timing, and ciphertext sizes. This metadata is outside the content-encryption boundary.
+
+## What version 0.1.3 does not protect
+
+The QR-delivered PSK profile does not provide forward secrecy. If the device master key is later compromised and an attacker previously recorded ciphertext, historical confidentiality may be affected. Compromised phone or computer endpoints are also outside the threat model.
 
 ## Pairings can be revoked
 
@@ -51,6 +55,6 @@ Removing a pairing revokes the Relay device credential, disconnects active acces
 
 ## Practical choices
 
-For low-risk evaluation, use the public Relay with the documented limitation in mind. For more control over the trust boundary, [operate a private Relay](/self-hosted-relay/). Self-hosting does not create end-to-end encryption, but it places the Relay process and stored metadata under your control.
+The hosted and private Relay paths both preserve end-to-end content encryption. [Operate a private Relay](/self-hosted-relay/) when you also need account data, logs, and observable traffic metadata under your control.
 
 See the [complete security model](/security/) and report vulnerabilities privately through the Suite security policy.

@@ -55,7 +55,7 @@ curl -I https://www.dshmobile.online/
 
 - Product claims must match the Suite and component repositories.
 - The project must always be identified as an unofficial community project.
-- Do not describe the MVP as application-level end-to-end encrypted.
+- Describe 0.1.3 narrowly as end-to-end encryption for DSH session content between Mobile and Companion; retain the documented metadata and forward-secrecy limits.
 - Do not publish release metrics, compatibility claims, or user testimonials without a source.
 
 ## License
