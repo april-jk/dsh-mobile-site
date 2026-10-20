@@ -1,0 +1,37 @@
+---
+import DshArticleLayout from '~/layouts/DshArticleLayout.astro';
+import Image from '~/components/common/Image.astro';
+import { getCanonical } from '~/utils/permalinks';
+
+interface Props {
+  frontmatter: { title: string; description: string; publishDate: string; image: string; imageAlt: string };
+}
+const { frontmatter } = Astro.props;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: frontmatter.title,
+  description: frontmatter.description,
+  inLanguage: 'pl',
+  url: String(getCanonical(Astro.url.pathname)),
+  datePublished: new Date(frontmatter.publishDate).toISOString(),
+  author: {
+    '@type': 'Organization',
+    name: 'Społeczność DSH Mobile',
+    url: 'https://github.com/april-jk/dsh-mobile-suite',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Społeczność DSH Mobile',
+    url: 'https://github.com/april-jk/dsh-mobile-suite',
+  },
+};
+---
+
+<DshArticleLayout title={frontmatter.title} description={frontmatter.description} structuredData={schema}>
+  <p>17 sierpnia 2026 r. · Społeczność DSH Mobile</p>
+  <Image src={frontmatter.image} alt={frontmatter.imageAlt} width={800} class="mx-auto max-h-[640px] w-auto" />
+  <p>Zrzut przedstawia oryginalny interfejs produktu; widoczne na nim napisy nie zostały przetłumaczone.</p>
+  <slot />
+  <p><a href="/pl/blog/">Wszystkie poradniki</a></p>
+</DshArticleLayout>

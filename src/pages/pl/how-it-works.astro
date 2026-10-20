@@ -1,0 +1,104 @@
+---
+import Image from '~/components/common/Image.astro';
+import DshArticleLayout from '~/layouts/DshArticleLayout.astro';
+import settingsImage from '~/assets/images/dsh/remote-access-settings.png';
+import runningImage from '~/assets/images/dsh/mobile-harness-running.png';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  inLanguage: 'pl',
+  name: 'Jak korzystać z DeepSeek Harness w telefonie z Androidem',
+  description:
+    'Zainstaluj DSH Mobile Remote, sparuj telefon w ustawieniach DeepSeek Harness i otwórz zwykły interfejs DSH Web.',
+  totalTime: 'PT10M',
+  supply: [
+    { '@type': 'HowToSupply', name: 'Telefon z Androidem 8.0 lub nowszym' },
+    { '@type': 'HowToSupply', name: 'Komputer z DeepSeek Harness 0.1.0-rc.6' },
+  ],
+  step: [
+    {
+      '@type': 'HowToStep',
+      name: 'Zainstaluj DSH Mobile i wtyczkę DSH',
+      text: 'Zainstaluj podpisany APK na Androida oraz wtyczkę z przypiętego tagu GitHuba i uruchom DSH Web.',
+      url: 'https://dshmobile.online/pl/download/',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Utwórz szyfrowany kod QR do parowania',
+      text: 'Otwórz ustawienia dostępu zdalnego (Settings > Remote Access) w DSH i utwórz szyfrowany kod QR.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Sparuj telefon',
+      text: 'Zaloguj się w aplikacji, zeskanuj kod QR i wybierz komputer online.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Uruchom zwykłe zadanie Harness',
+      text: 'Utwórz zadanie, wyślij instrukcje i śledź postęp w zwykłym interfejsie DSH Web.',
+    },
+  ],
+};
+---
+
+<DshArticleLayout
+  title="Jak działa DSH Mobile Remote"
+  description="Sparuj telefon z Androidem z komputerem, na którym działa DeepSeek Harness, i otwórz prawdziwy interfejs DSH Web przez wychodzące połączenie z Relay."
+  icon="tabler:route"
+  structuredData={schema}
+>
+  <h2>Droga połączenia</h2>
+  <p>
+    DeepSeek Harness nadal nasłuchuje na <code>127.0.0.1:3080</code>. Wtyczka Companion otwiera wychodzące połączenie
+    WSS do skonfigurowanego Relay. Telefon uwierzytelnia się kontem, prosi o krótkotrwały bilet WebView i otwiera
+    przekazywany interfejs DSH.
+  </p>
+  <div class="info-grid not-prose">
+    <section>
+      <h3 class="text-xl font-bold">Co pozostaje lokalnie</h3><p class="mt-3 leading-7 text-muted">
+        Serwer DSH i dane uwierzytelniające urządzenia pozostają na komputerze. Nie powstaje publiczny port
+        przychodzący.
+      </p>
+    </section>
+    <section>
+      <h3 class="text-xl font-bold">Co przechodzi przez Relay</h3><p class="mt-3 leading-7 text-muted">
+        Nieprzezroczyste, szyfrowane ramki. Treść HTTP, SSE i WebSocket odszyfrowują wyłącznie Mobile i Companion.
+      </p>
+    </section>
+  </div>
+  <h2>Utwórz parowanie i zarządzaj nim</h2>
+  <p>
+    Otwórz ustawienia dostępu zdalnego (<strong>Settings &gt; Remote Access</strong>) w DSH. Utwórz szyfrowany kod QR,
+    zeskanuj go w Mobile, przeglądaj ostatnie połączenia telefonu i usuń parowanie na tym samym ekranie. Parowanie samym
+    sześciocyfrowym kodem jest wyłączone w wersji 0.1.4, ponieważ kod nie może przenieść klucza szyfrowania.
+  </p>
+  <Image
+    src={settingsImage}
+    alt="Ustawienia dostępu zdalnego w DeepSeek Harness — oryginalny zrzut ekranu"
+    width={800}
+    height={747}
+    class="w-full"
+  />
+  <p>Zrzuty przedstawiają oryginalny interfejs produktu; widoczne na nich napisy nie zostały przetłumaczone.</p>
+  <h2>Korzystaj z prawdziwego interfejsu Harness</h2>
+  <p>
+    Zdalny WebView zachowuje zwykły obszar roboczy, tryb, model, edytor zadania, rozmowę, wstrzyknięty kontekst, stan
+    rozumowania, czas wykonania i przycisk zatrzymania. Nie jest osobnym API zadań ani uproszczoną kopią.
+  </p>
+  <Image
+    src={runningImage}
+    alt="Zadanie DeepSeek Harness w zdalnym WebView telefonu — oryginalny zrzut ekranu"
+    width={430}
+    height={932}
+    class="mx-auto max-h-[760px] w-auto"
+  />
+  <h2>Gdy komputer jest niedostępny</h2>
+  <p>
+    Telefon pokazuje komputer jako offline, gdy komputer lub DSH jest wyłączony albo wtyczka utraci połączenie z Relay.
+    Companion działa razem z procesem DSH Web i nie potrzebuje osobnego procesu w tle.
+  </p>
+  <p>
+    Chcesz spróbować? <a href="/pl/download/">Pobierz aplikację na Androida</a>. Aby samodzielnie kontrolować granicę
+    sieciową, skorzystaj z <a href="/pl/self-hosted-relay/">poradnika prywatnego Relay</a>.
+  </p>
+</DshArticleLayout>

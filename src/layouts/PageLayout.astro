@@ -3,7 +3,8 @@ import Layout from '~/layouts/Layout.astro';
 import Header from '~/components/widgets/Header.astro';
 import Footer from '~/components/widgets/Footer.astro';
 
-import { headerData, footerData } from '~/navigation';
+import { navigationFor } from '~/navigation';
+import { localeFromPath, localeAlternates } from '~/data/dsh-site';
 
 import type { MetaData } from '~/types';
 
@@ -13,19 +14,28 @@ export interface Props {
   textDirection?: 'ltr' | 'rtl';
 }
 
-const { metadata, language, textDirection } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+const { metadata, language = locale, textDirection } = Astro.props;
+const { headerData, footerData } = navigationFor(locale, Astro.url.pathname);
 ---
 
 <Layout metadata={metadata} language={language} textDirection={textDirection}>
-  <Fragment slot="head"><slot name="head" /></Fragment>
+  <Fragment slot="head">
+    {
+      localeAlternates(Astro.url.pathname).map(({ lang, href }) => (
+        <link rel="alternate" hreflang={lang} href={`https://dshmobile.online${href}`} />
+      ))
+    }
+    <slot name="head" />
+  </Fragment>
   <slot name="announcement" />
   <slot name="header">
-    <Header {...headerData} isSticky showRssFeed showToggleTheme />
+    <Header locale={locale} {...headerData} isSticky showRssFeed showToggleTheme />
   </slot>
   <main>
     <slot />
   </main>
   <slot name="footer">
-    <Footer {...footerData} />
+    <Footer locale={locale} {...footerData} />
   </slot>
 </Layout>

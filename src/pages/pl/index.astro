@@ -1,0 +1,52 @@
+---
+import DshLanding from '~/components/dsh/DshLanding.astro';
+import PageLayout from '~/layouts/PageLayout.astro';
+import { faqs, siteCopy } from '~/data/dsh-site';
+
+const metadata = {
+  title: 'DSH Mobile Remote | DeepSeek Harness na Androidzie',
+  ignoreTitleTemplate: true,
+  description:
+    'Otwórz lokalny interfejs WWW DeepSeek Harness ze sparowanego telefonu z Androidem, wysyłaj zwykłe zadania DSH lub korzystaj z własnego Relay.',
+};
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'DSH Mobile Remote',
+    alternateName: 'DSH Remote',
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Android 8.0 lub nowszy',
+    inLanguage: 'pl',
+    url: 'https://dshmobile.online/pl/',
+    downloadUrl: 'https://github.com/april-jk/dsh-mobile-suite/releases/latest',
+    codeRepository: 'https://github.com/april-jk/dsh-mobile-suite',
+    license: 'https://opensource.org/license/mit',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: 0, priceCurrency: 'USD' },
+    description: metadata.description,
+    author: {
+      '@type': 'Organization',
+      name: 'Społeczność DSH Mobile',
+      url: 'https://github.com/april-jk/dsh-mobile-suite',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: siteCopy.pl.lang,
+    mainEntity: faqs.pl.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  },
+];
+---
+
+<PageLayout metadata={metadata} language="pl">
+  <Fragment slot="head"
+    ><script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} /></Fragment
+  >
+  <DshLanding locale="pl" />
+</PageLayout>

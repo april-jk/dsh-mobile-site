@@ -1,0 +1,54 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+const metadata = {
+  title: 'Poradniki zdalnego dostępu do DeepSeek Harness',
+  description:
+    'Praktyczne poradniki zdalnego dostępu do DeepSeek Harness z Androida, wdrażania prywatnego Relay i granic bezpieczeństwa DSH Mobile.',
+};
+const articles = [
+  {
+    slug: 'remote-deepseek-harness-from-android',
+    title: 'Jak uruchomić DeepSeek Harness z telefonu z Androidem',
+    description:
+      'Sparuj telefon, otwórz prawdziwy interfejs Harness i wyślij zwykłe zadanie bez publicznego portu na komputerze.',
+  },
+  {
+    slug: 'dsh-mobile-security-boundaries',
+    title: 'Co DSH Mobile szyfruje, a czego nie',
+    description: 'TLS, klucze przekazywane kodem QR, szyfrowane tunele, metadane Relay i pozostałe ograniczenia.',
+  },
+  {
+    slug: 'when-to-self-host-dsh-relay',
+    title: 'Kiedy prowadzić własny DSH Mobile Relay',
+    description: 'Porównaj hostowany i prywatny Relay: kontrola, przechowywanie danych, HTTPS i ograniczenia MVP.',
+  },
+];
+---
+
+<PageLayout metadata={metadata}>
+  <section class="mx-auto max-w-4xl px-6 py-16 lg:py-20">
+    <h1 class="text-4xl font-bold md:text-5xl">Poradniki zdalnego dostępu do DeepSeek Harness</h1>
+    <p class="mt-6 text-lg text-muted">
+      Praktyczne wskazówki dotyczące dostępu zdalnego, wdrażania Relay i obecnego modelu bezpieczeństwa.
+    </p>
+    <ul class="mt-12 space-y-10">
+      {
+        articles.map((article) => (
+          <li>
+            <article>
+              <>
+                <h2 class="text-2xl font-bold">
+                  <a class="hover:underline" href={`/pl/blog/${article.slug}/`}>
+                    {article.title}
+                  </a>
+                </h2>
+                <p class="mt-3 leading-7 text-muted">{article.description}</p>
+                <p class="mt-3 text-sm text-muted">17 sierpnia 2026 r. · Społeczność DSH Mobile</p>
+              </>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</PageLayout>

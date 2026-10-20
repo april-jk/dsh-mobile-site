@@ -36,7 +36,13 @@ const { metadata = {}, language = I18N.language, textDirection = I18N.textDirect
     <Font cssVariable="--font-dm-sans" preload />
     <CustomStyles />
     <ApplyColorMode />
-    <Metadata {...metadata} />
+    <Metadata
+      {...metadata}
+      openGraph={{
+        ...metadata.openGraph,
+        locale: language === 'pl' ? 'pl_PL' : language === 'zh-CN' ? 'zh_CN' : 'en_US',
+      }}
+    />
     <SiteVerification />
     <Analytics />
 
