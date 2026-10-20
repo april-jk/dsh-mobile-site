@@ -1,0 +1,80 @@
+---
+import DshArticleLayout from '~/layouts/DshArticleLayout.astro';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  inLanguage: 'pl',
+  headline: 'Własny serwer DSH Mobile Relay',
+  description: 'Wdróż otwarty DSH Relay za HTTPS i ustaw ten sam origin w telefonie i na komputerze.',
+  url: 'https://dshmobile.online/pl/self-hosted-relay/',
+  codeRepository: 'https://github.com/april-jk/dsh-relay',
+  proficiencyLevel: 'Intermediate',
+};
+---
+
+<DshArticleLayout
+  title="Własny serwer DSH Mobile Relay"
+  description="Wdróż Relay na licencji MIT za HTTPS, zapewnij trwałe przechowywanie danych SQLite i ustaw jeden origin w aplikacji na Androida i na komputerze."
+  icon="tabler:server-2"
+  structuredData={schema}
+>
+  <p>
+    Prywatny Relay daje kontrolę nad serwerem, magazynem danych, logami i granicą kont. Publiczne wersje aplikacji
+    mobilnej mogą zmieniać origin Relay bez ponownej kompilacji.
+  </p>
+  <h2>Wymagania</h2>
+  <div class="info-grid not-prose">
+    <section>
+      <h3 class="text-xl font-bold">Środowisko uruchomieniowe</h3><p class="mt-3 leading-7 text-muted">
+        Docker Compose lub Node.js 18 albo nowszy z pakietem kodu źródłowego wydania.
+      </p>
+    </section>
+    <section>
+      <h3 class="text-xl font-bold">Publiczny punkt dostępu</h3><p class="mt-3 leading-7 text-muted">
+        Stały origin HTTPS z obsługą WebSocket i odwrotnym proxy do portu 8787.
+      </p>
+    </section>
+    <section>
+      <h3 class="text-xl font-bold">Trwałość danych</h3><p class="mt-3 leading-7 text-muted">
+        Trwały magazyn i kopie zapasowe danych SQLite w <code>/data</code>.
+      </p>
+    </section>
+    <section>
+      <h3 class="text-xl font-bold">Układ wdrożenia</h3><p class="mt-3 leading-7 text-muted">
+        Jedna instancja Relay w MVP. Koordynacja wielu instancji nie jest zaimplementowana.
+      </p>
+    </section>
+  </div>
+  <h2>Uruchom pakiet wydania</h2>
+  <p>
+    Pobierz <code>dsh-relay-v*.tar.gz</code> z najnowszego wydania Suite, rozpakuj go i ustaw długi, losowy sekret JWT.
+  </p>
+  <pre><code>cp .env.example .env
+# Edytuj .env i zastąp JWT_SECRET długą, losową wartością.
+docker compose up -d --build
+curl http://127.0.0.1:8787/health</code></pre>
+  <h2>Dodaj HTTPS przed usługą</h2>
+  <p>
+    Skieruj nazwę hosta HTTPS do portu <code>8787</code> i zezwól na przejście do protokołu WebSocket. Nie udostępniaj surowego
+    deweloperskiego portu HTTP jako produkcyjnego punktu dostępu. Wykonuj kopie zapasowe katalogu danych trwałych.
+  </p>
+  <h2>Ustaw ten sam Relay po obu stronach</h2>
+  <p>Uruchom DSH z prywatnym originem:</p>
+  <pre><code>DSH_RELAY=https://relay.example.com npx @deepseek-ai/dsh web</code></pre>
+  <p>
+    Na ekranie logowania aplikacji mobilnej dotknij <strong>Relay</strong>. Po zalogowaniu ta sama opcja znajduje się w
+    ustawieniach serwera Relay (<strong>Settings &gt; Relay Server</strong>). Wprowadź dokładnie ten origin HTTPS,
+    którego używa komputer.
+  </p>
+  <p>
+    Zmiana Relay wylogowuje bieżące konto, ponieważ konta i tokeny są odizolowane między instancjami Relay. Pełny <a
+      href="https://github.com/april-jk/dsh-relay#readme">README Relay</a
+    > opisuje zmienne środowiskowe, przechowywanie danych i limity zasobów.
+  </p>
+  <h2>Granica bezpieczeństwa</h2>
+  <p>
+    Wersja 0.1.4 zachowuje szyfrowanie treści sesji DSH od końca do końca zarówno z hostowanym, jak i prywatnym Relay.
+    Własny hosting dodatkowo daje kontrolę nad danymi kont, metadanymi ruchu, terminacją TLS, magazynem danych i logami.
+    Przeczytaj <a href="/pl/security/">obecny model bezpieczeństwa</a>, zanim udostępnisz usługę użytkownikom.
+  </p>
+</DshArticleLayout>

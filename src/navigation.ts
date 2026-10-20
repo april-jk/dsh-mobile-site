@@ -1,62 +1,69 @@
 import { getAsset, getBlogPermalink, getPermalink } from './utils/permalinks';
+import { chromeCopy, localeHref, productPaths, releaseUrl, unlocalizedPath, type SiteLocale } from './data/dsh-site';
 
-const releaseUrl = 'https://github.com/april-jk/dsh-mobile-suite/releases/latest';
-
-export const headerData = {
-  links: [
-    { text: 'How it works', href: getPermalink('/how-it-works') },
-    { text: 'Private Relay', href: getPermalink('/self-hosted-relay') },
-    { text: 'Security', href: getPermalink('/security') },
-    { text: 'Blog', href: getBlogPermalink() },
-    { text: '简体中文', href: getPermalink('/zh-cn') },
-  ],
-  actions: [{ text: 'Download', href: getPermalink('/download') }],
-};
-
-export const footerData = {
-  links: [
-    {
-      title: 'Use DSH Mobile',
+export function navigationFor(locale: SiteLocale, pathname = '/') {
+  const c = chromeCopy[locale];
+  const link = (path: string) => getPermalink(localeHref(locale, path));
+  const base = unlocalizedPath(pathname.endsWith('/') ? pathname : `${pathname}/`);
+  return {
+    headerData: {
       links: [
-        { text: 'Download Android APK', href: getPermalink('/download') },
-        { text: 'How it works', href: getPermalink('/how-it-works') },
-        { text: 'Security model', href: getPermalink('/security') },
-      ],
-    },
-    {
-      title: 'Open source',
-      links: [
-        { text: 'Mobile Suite', href: 'https://github.com/april-jk/dsh-mobile-suite' },
-        { text: 'DSH plugin', href: 'https://github.com/april-jk/dsh-mobile-plugin' },
-        { text: 'Relay server', href: 'https://github.com/april-jk/dsh-relay' },
-      ],
-    },
-    {
-      title: 'Resources',
-      links: [
-        { text: 'Private Relay guide', href: getPermalink('/self-hosted-relay') },
-        { text: 'Latest release', href: releaseUrl },
+        { text: c.how, href: link('/how-it-works/') },
+        { text: c.private, href: link('/self-hosted-relay/') },
+        { text: c.security, href: link('/security/') },
+        { text: c.blog, href: locale === 'pl' ? link('/blog/') : getBlogPermalink() },
         {
-          text: 'Community discussion',
-          href: 'https://github.com/deepseek-ai/deepseek-harness/discussions/2520',
+          text: c.languages,
+          links: [
+            { text: 'English', href: getPermalink((productPaths as readonly string[]).includes(base) ? base : '/') },
+            {
+              text: 'Polski',
+              href: getPermalink(localeHref('pl', (productPaths as readonly string[]).includes(base) ? base : '/')),
+            },
+            { text: '简体中文', href: getPermalink('/zh-cn/') },
+          ],
         },
       ],
+      actions: [{ text: c.download, href: link('/download/') }],
     },
-  ],
-  secondaryLinks: [
-    { text: 'Privacy', href: getPermalink('/privacy') },
-    { text: 'Terms', href: getPermalink('/terms') },
-  ],
-  socialLinks: [
-    { ariaLabel: 'RSS feed', icon: 'tabler:rss', href: getAsset('/rss.xml') },
-    {
-      ariaLabel: 'GitHub source',
-      icon: 'tabler:brand-github',
-      href: 'https://github.com/april-jk/dsh-mobile-suite',
+    footerData: {
+      links: [
+        {
+          title: c.use,
+          links: [
+            { text: c.apk, href: link('/download/') },
+            { text: c.how, href: link('/how-it-works/') },
+            { text: c.model, href: link('/security/') },
+          ],
+        },
+        {
+          title: c.open,
+          links: [
+            { text: c.suite, href: 'https://github.com/april-jk/dsh-mobile-suite' },
+            { text: c.plugin, href: 'https://github.com/april-jk/dsh-mobile-plugin' },
+            { text: c.relay, href: 'https://github.com/april-jk/dsh-relay' },
+          ],
+        },
+        {
+          title: c.resources,
+          links: [
+            { text: c.guide, href: link('/self-hosted-relay/') },
+            { text: c.release, href: releaseUrl },
+            { text: c.discussion, href: 'https://github.com/deepseek-ai/deepseek-harness/discussions/2520' },
+          ],
+        },
+      ],
+      secondaryLinks: [
+        { text: c.privacy, href: link('/privacy/') },
+        { text: c.terms, href: link('/terms/') },
+      ],
+      socialLinks: [
+        { ariaLabel: c.rss, icon: 'tabler:rss', href: getAsset('/rss.xml') },
+        { ariaLabel: c.source, icon: 'tabler:brand-github', href: 'https://github.com/april-jk/dsh-mobile-suite' },
+      ],
+      footNote: c.footnote,
     },
-  ],
-  footNote: `
-    <strong>Unofficial community project.</strong> Not reviewed, endorsed, or supported by DeepSeek.<br />
-    Built from <a class="text-primary underline" href="https://github.com/arthelokyo/astrowind">AstroWind</a> under the MIT License.
-  `,
-};
+  };
+}
+
+export const { headerData, footerData } = navigationFor('en');

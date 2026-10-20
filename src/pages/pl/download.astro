@@ -1,0 +1,70 @@
+---
+import Icon from '~/components/common/Icon.astro';
+import DshArticleLayout from '~/layouts/DshArticleLayout.astro';
+import Button from '~/components/ui/Button.astro';
+import { releaseUrl } from '~/data/dsh-site';
+const apkUrl = 'https://github.com/april-jk/dsh-mobile-suite/releases/latest/download/dsh-mobile-android.apk';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'DSH Mobile Remote',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Android 8.0 lub nowszy',
+  softwareVersion: '0.1.4',
+  downloadUrl: apkUrl,
+  softwareRequirements: 'DeepSeek Harness 0.1.0-rc.6 i Node.js 18 lub nowszy na sparowanym komputerze',
+  isAccessibleForFree: true,
+  license: 'https://opensource.org/license/mit',
+  inLanguage: 'pl',
+};
+---
+
+<DshArticleLayout
+  title="Pobierz DSH Mobile na Androida"
+  description="Pobierz podpisany APK na Androida, sprawdź sumę SHA-256 i zainstaluj odpowiednią wtyczkę DeepSeek Harness na komputerze."
+  icon="tabler:download"
+  structuredData={schema}
+>
+  <div class="not-prose flex flex-col gap-3 sm:flex-row">
+    <Button variant="primary" href={apkUrl} icon="tabler:brand-android">Pobierz APK</Button>
+    <Button variant="secondary" href={releaseUrl} target="_blank" icon="tabler:external-link">Najnowsze wydanie</Button>
+  </div>
+  <p>
+    Publiczne wydanie zawiera obecnie podpisany APK dla Androida 8.0 lub nowszego. Identyfikator aplikacji to <code
+      >io.github.apriljk.dshremote</code
+    >. Android może poprosić o zezwolenie przeglądarce lub menedżerowi plików na instalowanie nieznanych aplikacji.
+  </p>
+  <h2>Sprawdź pobrane pliki</h2>
+  <p>Pobierz <code>SHA256SUMS</code> z tego samego wydania i sprawdź pliki przed instalacją:</p>
+  <pre><code>shasum -a 256 -c SHA256SUMS</code></pre>
+  <h2>Zainstaluj wtyczkę na komputerze</h2>
+  <p>
+    Zalecamy instalację z przypiętego tagu GitHuba. Nie wymaga globalnej instalacji DSH, pobrania repozytorium ani
+    lokalnej ścieżki wtyczki.
+  </p>
+  <pre><code>npx @deepseek-ai/dsh plugin --profile web add "github:april-jk/dsh-mobile-plugin#v0.1.4"
+npx @deepseek-ai/dsh web</code></pre>
+  <h2>Sparuj telefon</h2>
+  <div class="info-grid not-prose">
+    <section>
+      <Icon name="tabler:settings" class="size-8 text-primary" /><h3 class="mt-5 text-xl font-bold">
+        Otwórz dostęp zdalny
+      </h3><p class="mt-3 leading-7 text-muted">
+        W DSH Web otwórz ustawienia dostępu zdalnego (Settings &gt; Remote Access) i utwórz szyfrowany kod QR do
+        parowania.
+      </p>
+    </section>
+    <section>
+      <Icon name="tabler:qrcode" class="size-8 text-primary" /><h3 class="mt-5 text-xl font-bold">
+        Dokończ parowanie
+      </h3><p class="mt-3 leading-7 text-muted">
+        Zaloguj się w telefonie, dotknij +, zeskanuj kod QR i wybierz komputer online.
+      </p>
+    </section>
+  </div>
+  <p>
+    Wersja 0.1.4 szyfruje treść sesji DSH między Mobile a Companion. Przed użyciem publicznego Relay przeczytaj <a
+      href="/pl/security/">model bezpieczeństwa</a
+    >, w tym ograniczenia dotyczące metadanych i utajniania z wyprzedzeniem (forward secrecy).
+  </p>
+</DshArticleLayout>

@@ -1,5 +1,7 @@
 # DSH Mobile Remote website
 
+[English](README.md) | [Polski](README.pl.md)
+
 Static promotional and documentation site for [DSH Mobile Remote](https://github.com/april-jk/dsh-mobile-suite), published at [dshmobile.online](https://dshmobile.online).
 
 The site is based on the MIT-licensed [AstroWind](https://github.com/arthelokyo/astrowind) template and keeps its Astro, Tailwind CSS, sitemap, RSS, image optimization, and metadata infrastructure.
@@ -21,7 +23,15 @@ The development server starts on `http://localhost:4321`.
 npm run generate:assets
 npm run check
 npm run build
+npm run check:locales
 ```
+
+## Website languages
+
+- [English](https://dshmobile.online/), [Polski](https://dshmobile.online/pl/), and the existing [简体中文 homepage](https://dshmobile.online/zh-cn/).
+- Polish covers the homepage, download, how-it-works, security, private Relay, privacy, terms, and all three product guides. English routes remain unchanged. Chinese keeps its existing homepage and explicitly labels English-only destination links.
+- Homepage copy and FAQs live in `src/data/dsh-site.ts`; shared navigation uses the same locale owner. `npm run check:locales` checks locale copy parity and generated routes, internal links, metadata, accessible names, and common English-copy leaks after a build. RSS remains English and is labeled accordingly.
+- Product screenshots remain the original assets. Translated captions and alternative text do not mean their pixels are localized.
 
 ## Deployment
 

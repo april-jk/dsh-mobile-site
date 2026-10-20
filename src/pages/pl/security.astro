@@ -1,0 +1,110 @@
+---
+import Icon from '~/components/common/Icon.astro';
+import DshArticleLayout from '~/layouts/DshArticleLayout.astro';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  inLanguage: 'pl',
+  headline: 'Model bezpieczeństwa DSH Mobile Remote',
+  description:
+    'Udokumentowane granice zaufania, szyfrowanie treści od końca do końca, przechowywane dane i obecne ograniczenia.',
+  url: 'https://dshmobile.online/pl/security/',
+  codeRepository: 'https://github.com/april-jk/dsh-mobile-suite',
+};
+---
+
+<DshArticleLayout
+  title="Model bezpieczeństwa DSH Mobile Remote"
+  description="Przed sparowaniem telefonu poznaj połączenie wychodzące, klucz przekazywany kodem QR, szyfrowany tunel, metadane Relay i obecne ograniczenia."
+  icon="tabler:shield-lock"
+  structuredData={schema}
+>
+  <div
+    class="not-prose rounded-xl border border-amber-300 bg-amber-50 p-6 text-amber-950 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100"
+  >
+    <div class="flex gap-4">
+      <Icon name="tabler:alert-triangle" class="mt-0.5 size-6 shrink-0" /><p class="leading-7">
+        Wersja 0.1.4 szyfruje treść DSH HTTP, SSE i WebSocket od końca do końca między Mobile a Companion. Relay
+        przekazuje nieprzezroczyste ramki i nigdy nie otrzymuje klucza treści.
+      </p>
+    </div>
+  </div>
+  <h2>Granica sieciowa</h2>
+  <p>
+    DeepSeek Harness pozostaje związany z <code>127.0.0.1:3080</code>. Companion nie tworzy publicznego serwera. Otwiera
+    wychodzące, uwierzytelnione połączenie WSS do skonfigurowanego Relay i przepisuje nagłówek Host żądania do lokalnego
+    serwera DSH.
+  </p>
+  <h2>Dane uwierzytelniające</h2>
+  <div class="info-grid not-prose">
+    <section>
+      <Icon name="tabler:device-mobile" class="size-8 text-primary" /><h3 class="mt-5 text-xl font-bold">
+        Klient mobilny
+      </h3><p class="mt-3 leading-7 text-muted">
+        Używa tokenów dostępu do konta, krótkotrwałych biletów WebView i klucza E2EE otrzymanego kodem QR, zapisanego w
+        bezpiecznym magazynie platformy. Nigdy nie otrzymuje tokenu urządzenia komputera.
+      </p>
+    </section>
+    <section>
+      <Icon name="tabler:device-laptop" class="size-8 text-primary" /><h3 class="mt-5 text-xl font-bold">Komputer</h3><p
+        class="mt-3 leading-7 text-muted"
+      >
+        Przechowuje token urządzenia Relay i klucz E2EE lokalnie w <code>~/.dsh-remote/config.json</code>, z
+        uprawnieniami dostępu wyłącznie dla właściciela.
+      </p>
+    </section>
+    <section>
+      <Icon name="tabler:database" class="size-8 text-primary" /><h3 class="mt-5 text-xl font-bold">Relay</h3><p
+        class="mt-3 leading-7 text-muted"
+      >
+        Przechowuje skróty haseł, tokenów odświeżania i tokenów urządzeń zamiast oryginalnych wartości.
+      </p>
+    </section>
+    <section>
+      <Icon name="tabler:clock-shield" class="size-8 text-primary" /><h3 class="mt-5 text-xl font-bold">
+        Sesja zdalna
+      </h3><p class="mt-3 leading-7 text-muted">
+        Używa jednorazowego biletu, uwierzytelnionego uzgadniania PSK, kierunkowych kluczy AES-256-GCM i numerów
+        sekwencyjnych chroniących przed powtórzeniem.
+      </p>
+    </section>
+  </div>
+  <h2>Co przechowuje Relay</h2>
+  <p>
+    Relay przechowuje konta, urządzenia, stan parowania, rodzaje zdarzeń i ograniczone metadane dziennika dostępu, takie
+    jak informacje o telefonie i czas dostępu. Nie może odszyfrować treści DSH HTTP, SSE ani WebSocket i nie utrwala
+    szyfrowanych ładunków.
+  </p>
+  <p>
+    Relay nadal może obserwować powiązania kont i urządzeń, stan online, czas połączenia, długość szyfrogramu i rozkład
+    ruchu w czasie. Szyfrowanie treści od końca do końca nie czyni usługi anonimową.
+  </p>
+  <h2>Unieważnienie dostępu</h2>
+  <p>
+    Usunięcie parowania unieważnia dane uwierzytelniające urządzenia w Relay, rozłącza aktywny dostęp zdalny i usuwa
+    lokalne dane uwierzytelniające po potwierdzeniu operacji przez Relay. Polecenie <code>dsh-mobile unpair</code> wykonuje
+    tę samą operację, gdy interfejs WWW jest niedostępny.
+  </p>
+  <h2>Znane ograniczenia MVP</h2>
+  <ul>
+    <li>Profil PSK z kluczem przekazywanym kodem QR nie zapewnia utajniania z wyprzedzeniem (forward secrecy).</li>
+    <li>Parowania utworzone przed wersją 0.1.3 trzeba usunąć i utworzyć ponownie za pomocą QR.</li>
+    <li>Brak weryfikacji adresu e-mail i odzyskiwania konta.</li>
+    <li>Relay musi działać jako pojedyncza instancja.</li>
+    <li>
+      Przed dystrybucją w sklepach z aplikacjami wymagane są usuwanie kont, pełna polityka prywatności i prace nad
+      zgodnością.
+    </li>
+  </ul>
+  <h2>Ściślejsza kontrola granic</h2>
+  <p>
+    Możesz <a href="/pl/self-hosted-relay/">wdrożyć własny Relay</a> i kontrolować hosting, terminację TLS, magazyn danych
+    oraz logi. Szyfrowanie treści od końca do końca pozostaje aktywne; własny hosting dodatkowo oddaje pod Twoją kontrolę
+    metadane i przechowywanie kont.
+  </p>
+  <p>
+    Zgłaszaj problemy bezpieczeństwa prywatnie zgodnie z procedurą w dokumencie <a
+      href="https://github.com/april-jk/dsh-mobile-suite/blob/main/SECURITY.md">SECURITY.md</a
+    > pakietu Suite. Nie publikuj szczegółów umożliwiających wykorzystanie podatności w publicznych zgłoszeniach.
+  </p>
+</DshArticleLayout>
